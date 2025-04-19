@@ -23,6 +23,10 @@ def home():
 @app.route('/homepage')
 def homepage():
     return render_template('homepage.html')
+    
+@app.route('/ourteam')
+def ourteam():
+    return render_template('ourteam.html')
 
 @app.route('/input')
 def input_page():
