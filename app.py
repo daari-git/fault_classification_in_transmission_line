@@ -56,4 +56,4 @@ def predict():
                                prediction=prediction_label)
 
     except Exception as e:
-        return render_template('result.html', error=f"Error: {str(e)}")
+        return render_template('result.html', error=f"Result: {str(e)}")
