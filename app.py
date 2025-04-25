@@ -28,6 +28,10 @@ def homepage():
 def ourteam():
     return render_template('ourteam.html')
 
+@app.route('/toolsandtech')
+def ourteam():
+    return render_template('toolsandtech.html')
+
 @app.route('/input')
 def input_page():
     return render_template('input.html')
