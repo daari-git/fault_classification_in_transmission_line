@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Our Team</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <style>
     * {
@@ -11,15 +12,16 @@
       box-sizing: border-box;
     }
 
-    body, html {
+    html, body {
       height: 100%;
+      margin: 0;
       font-family: 'Segoe UI', sans-serif;
-      background-color: #f4f4f4;
-      overflow: hidden;
+      background-color: #fff;
+      overscroll-behavior: none;
     }
 
     .team-profile {
-      height: 100vh;
+      height: 100dvh; /* ✅ dynamic full viewport on mobile */
       width: 100%;
       display: flex;
       align-items: center;
@@ -30,6 +32,8 @@
       padding: 20px;
       position: relative;
       transition: all 0.5s ease;
+      overflow: hidden;
+      touch-action: pan-y;
     }
 
     .team-profile img {
@@ -141,7 +145,7 @@
   </style>
 </head>
 <body>
-  <div class="team-profile" id="profile-container">
+  <div class="team-profile" id="profile-container" ontouchstart="handleTouchStart(event)" ontouchmove="handleTouchMove(event)" ontouchend="handleTouchEnd(event)">
     <div class="arrow left" onclick="prevProfile()"><i class="fas fa-chevron-left"></i></div>
     <div class="arrow right" onclick="nextProfile()"><i class="fas fa-chevron-right"></i></div>
     <div class="nav-dots" id="dots"></div>
@@ -149,9 +153,9 @@
 
   <script>
     const teamMembers = [
-    {
+      {
         photo: "/static/images/subash.jpg",
-        name: "Subash Khanal - ML Engineer  🤖",
+        name: "Subash Khanal - ML Engineer 🤖",
         description: "Subash creates and trains the machine learning models that detect and classify power system faults. Using the datasets generated from the MATLAB simulations, he applies and fine-tunes various ML algorithms to improve prediction accuracy and system reliability.",
         socials: {
           facebook: "https://www.facebook.com/kamalsubash.khanal",
@@ -163,7 +167,7 @@
       {
         photo: "/static/images/subarna.jpg",
         name: "Subarna Khadka - Electrical Systems Engineer 👨‍🔧",
-        description: "Subarna is responsible for developing the core MATLAB simulation model for power systems. He focuses on designing and simulating different fault scenarios, ensuring accurate electrical behavior, and generating quality datasets for machine learning. His domain expertise lies entirely in the electrical side of the project.",
+        description: "Subarna is responsible for developing the core MATLAB simulation model for power systems. He focuses on designing and simulating different fault scenarios, ensuring accurate electrical behavior, and generating quality datasets for machine learning.",
         socials: {
           facebook: "https://www.facebook.com/subarna.khadka.351",
           instagram: "https://www.instagram.com/its_me_subarna/",
@@ -171,32 +175,31 @@
           linkedin: "https://www.linkedin.com/in/subarna-khadka-b58804312/"
         }
       },
-      {
-        photo: "/static/images/sudesh.jpg",
-        name: "Sudesh Parajuli - Project Coordinator 📋",
-        description: "Sudesh manages the entire project workflow including documentation, reporting, proposal writing, and presentation design. He ensures that the project is well-documented and professionally presented for academic, client, or competition purposes.",
-        socials: {
-          facebook: "https://www.facebook.com/sudes.parajuli",
-          instagram: "https://www.instagram.com/sud_es_51/",
-          github: "#",
-          linkedin: "#"
-        }
+       {
+          photo: "/static/images/sudesh.jpg",
+          name: "Sudesh Parajuli - Project Coordinator 📋",
+          description: "Sudesh manages the entire project workflow including documentation, reporting, proposal writing, and presentation design. He ensures that the project is well-documented and professionally presented for academic, client, or competition purposes.",
+          socials: {
+            facebook: "https://www.facebook.com/sudes.parajuli",
+            instagram: "https://www.instagram.com/sud_es_51/",
+            github: "#",
+            linkedin: "#"
+         }
       },
-      {
-        photo: "/static/images/sagar.jpg",
-        name: "Sagar Shrestha - Technical Assistant 🧩",
-        description: "Sagar provides ongoing support across all project areas — from MATLAB to ML to documentation. He assists each member wherever needed, helping maintain smooth coordination and timely progress.",
-        socials: {
-          facebook: "https://www.facebook.com/profile.php?id=100016501716442",
-          instagram: "https://www.instagram.com/hawa1575_offical/",
-          github: "#",
-          linkedin: "#"
-        }
-      }
+        {
+          photo: "/static/images/sagar.jpg",
+          name: "Sagar Shrestha - Technical Assistant 🧩",
+          description: "Sagar provides ongoing support across all project areas — from MATLAB to ML to documentation. He assists each member wherever needed, helping maintain smooth coordination and timely progress.",
+          socials: {
+            facebook: "https://www.facebook.com/profile.php?id=100016501716442",
+            instagram: "https://www.instagram.com/hawa1575_offical/",
+            github: "#",
+            linkedin: "#"
+          }
+        },
     ];
 
     let currentIndex = 0;
-    let interval;
 
     function displayProfile(index) {
       const member = teamMembers[index];
@@ -204,19 +207,18 @@
 
       container.innerHTML = `
         <div class="arrow left" onclick="prevProfile()"><i class="fas fa-chevron-left"></i></div>
+        <div class="arrow right" onclick="nextProfile()"><i class="fas fa-chevron-right"></i></div>
         <img src="${member.photo}" alt="${member.name}">
         <h2>${member.name}</h2>
         <p>${member.description}</p>
         <div class="social-links">
-          <a href="${member.socials.facebook}" target="_blank"><i class="fab fa-facebook"></i></a>
-          <a href="${member.socials.instagram}" target="_blank"><i class="fab fa-instagram"></i></a>
-          <a href="${member.socials.github}" target="_blank"><i class="fab fa-github"></i></a>
-          <a href="${member.socials.linkedin}" target="_blank"><i class="fab fa-linkedin"></i></a>
+          ${Object.entries(member.socials).map(([platform, link]) =>
+            link && link !== "#"
+              ? `<a href="${link}" target="_blank"><i class="fab fa-${platform}"></i></a>`
+              : "").join("")}
         </div>
-        <div class="arrow right" onclick="nextProfile()"><i class="fas fa-chevron-right"></i></div>
         <div class="nav-dots" id="dots"></div>
       `;
-
       updateDots();
     }
 
@@ -229,7 +231,6 @@
         dot.addEventListener("click", () => {
           currentIndex = idx;
           displayProfile(currentIndex);
-          resetTimer();
         });
         dotsContainer.appendChild(dot);
       });
@@ -238,30 +239,37 @@
     function nextProfile() {
       currentIndex = (currentIndex + 1) % teamMembers.length;
       displayProfile(currentIndex);
-      resetTimer();
     }
 
     function prevProfile() {
       currentIndex = (currentIndex - 1 + teamMembers.length) % teamMembers.length;
       displayProfile(currentIndex);
-      resetTimer();
     }
 
-    function startAutoRotate() {
-      interval = setInterval(() => {
+    // Swipe gesture support
+    let startX = 0;
+
+    function handleTouchStart(e) {
+      startX = e.touches[0].clientX;
+    }
+
+    function handleTouchMove(e) {
+      // prevent vertical scroll interference
+      if (Math.abs(e.touches[0].clientX - startX) > 20) {
+        e.preventDefault();
+      }
+    }
+
+    function handleTouchEnd(e) {
+      const endX = e.changedTouches[0].clientX;
+      if (startX - endX > 50) {
         nextProfile();
-      }, 10000);
+      } else if (endX - startX > 50) {
+        prevProfile();
+      }
     }
 
-    function resetTimer() {
-      clearInterval(interval);
-      startAutoRotate();
-    }
-
-    window.onload = () => {
-      displayProfile(currentIndex);
-      startAutoRotate();
-    };
+    window.onload = () => displayProfile(currentIndex);
   </script>
 </body>
 </html>
