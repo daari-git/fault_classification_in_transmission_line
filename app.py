@@ -29,7 +29,7 @@ def ourteam():
     return render_template('ourteam.html')
 
 @app.route('/toolsandtech')
-def ourteam():
+def toolsandtech():
     return render_template('toolsandtech.html')
 
 @app.route('/input')
